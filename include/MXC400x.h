@@ -12,6 +12,7 @@
 #include <stdint.h>
 
 #define MXC400xADDRESS 0x15
+#define MXC400xDATAWIDTH 12
 
 typedef enum MXC400XREG {
 
@@ -35,24 +36,66 @@ typedef enum MXC400XREG {
 
 } MXC400xReg;
 
-typedef struct MXC400XDATA {
+typedef enum MXC400XRANGE {
+
+    RANGE_PM_2G     = 0x0,
+    RANGE_PM_4G     = 0x1,
+    RANGE_PM_8G     = 0x2,
+    RANGE_UNDEFINED = 0x3
+
+} MXC400xRange;
+
+typedef struct MXC400XRAWDATA {
 
     uint16_t x_accel;
-    uint16_t x_accel;
+    uint16_t y_accel;
     uint16_t z_accel;
     uint8_t temperature;
 
-} MXC400xData;
+} MXC400xRawData;
 
-typedef struct MXC400X {
+
+typedef struct MXC400XREALDATA {
+
+    float x_accel;
+    float y_accel;
+    float z_accel;
+    float temperature;
+
+} MXC400xRealData;
+
+typedef struct MXC400XHAL {
 
     /// @brief Function to write to an I2C Device from a Master
     uint32_t (*i2c_reg_write)(const uint8_t address, const uint8_t reg, const void* const data, const uint32_t size);
     /// @brief Function to read from an I2C Device to a Master
     uint32_t (*i2c_reg_read)(const uint8_t address, const uint8_t reg, void* const data, const uint32_t size);
 
+} MXC400xHAL;
+
+typedef struct MXC400X {
+
+    MXC400xHAL hal;
+    MXC400xRange range;
+
 } MXC400x;
 
+/**
+ * @brief 
+ * 
+ * @param dev 
+ * @param hal 
+ * @param range 
+ * @return MXC400x* 
+ */
+MXC400x* MXC400xInit(MXC400x* const dev, const MXC400xHAL* const hal, const MXC400xRange range);
+
+/**
+ * @brief 
+ * 
+ * @param dev 
+ */
+void MXC400xDeinit(MXC400x* const dev);
 
 /**
  * @brief 
@@ -61,7 +104,7 @@ typedef struct MXC400X {
  * @param register 
  * @return uint8_t 
  */
-uint8_t MXC400xRead(const MXC400x* const dev, const MXC400xReg register);
+uint8_t MXC400xRead(const MXC400x* const dev, const MXC400xReg reg);
 
 /**
  * @brief 
@@ -70,7 +113,7 @@ uint8_t MXC400xRead(const MXC400x* const dev, const MXC400xReg register);
  * @param regsiter 
  * @param value 
  */
-void MXC400xWrite(const MXC400x* const dev, const MXC400xReg regsiter, const uint8_t value);
+uint8_t MXC400xWrite(const MXC400x* const dev, const MXC400xReg reg, const uint8_t value);
 
 /**
  * @brief 
@@ -78,7 +121,15 @@ void MXC400xWrite(const MXC400x* const dev, const MXC400xReg regsiter, const uin
  * @param dev 
  * @return uint16_t 
  */
-uint16_t MXC400xReadX(const MXC400x* const dev);
+int16_t MXC400xReadXRaw(const MXC400x* const dev);
+
+/**
+ * @brief 
+ * 
+ * @param dev 
+ * @return float 
+ */
+float MXC400xReadX(const MXC400x* const dev);
 
 /**
  * @brief 
@@ -86,7 +137,15 @@ uint16_t MXC400xReadX(const MXC400x* const dev);
  * @param dev 
  * @return uint16_t 
  */
-uint16_t MXC400xReadY(const MXC400x* const dev);
+int16_t MXC400xReadYRaw(const MXC400x* const dev);
+
+/**
+ * @brief 
+ * 
+ * @param dev 
+ * @return float 
+ */
+float MXC400xReadY(const MXC400x* const dev);
 
 /**
  * @brief 
@@ -94,12 +153,38 @@ uint16_t MXC400xReadY(const MXC400x* const dev);
  * @param dev 
  * @return uint16_t 
  */
-uint16_t MXC400xReadZ(const MXC400x* const dev);
+int16_t MXC400xReadZRaw(const MXC400x* const dev);
+
+/**
+ * @brief 
+ * 
+ * @param dev 
+ * @return int8_t 
+ */
+int8_t MXC400xReadTRaw(const MXC400x* const dev);
+
+/**
+ * @brief 
+ * 
+ * @param dev 
+ * @return float 
+ */
+float MXC400xReadT(const MXC400x* const dev);
 
 /**
  * @brief 
  * 
  * @param dev 
  */
-void MXC400xReadData(const MXC400x* const dev, MXC400xData* const data);
+uint8_t MXC400xReadRawData(const MXC400x* const dev, MXC400xRawData* const data);
+
+/**
+ * @brief 
+ * 
+ * @param dev 
+ * @param data 
+ * @return uint8_t 
+ */
+uint8_t MXC400xReadRealData(const MXC400x* const dev, MXC400xRealData* const data);
+
 
