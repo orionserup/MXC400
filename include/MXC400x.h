@@ -197,6 +197,18 @@ void MXC400xClearInt(const MXC400x* const dev);
 /**
  * @brief 
  * 
+ * @param dev
+ * @param mode 
+ * @param speed 
+ * @param thresh 
+ * @param chor 
+ * @return uint8_t 
+ */
+uint8_t MXC400xSetDetection(const MXC400x* const dev, const MXC400xShakeMode mode, const MXC400xShakeSpeed speed, const MXC400xShakeThresh thresh, const MXC400xOrientChange chor);
+
+/**
+ * @brief 
+ * 
  * @param dev 
  * @param regsiter 
  * @param value 
