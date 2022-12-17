@@ -12,7 +12,6 @@
 #include <stdint.h>
 
 #define MXC400xADDRESS 0x15
-#define MXC400xDATAWIDTH 12
 
 typedef enum MXC400XREG {
 
@@ -45,15 +44,71 @@ typedef enum MXC400XRANGE {
 
 } MXC400xRange;
 
+typedef enum MXC400XINTSOURCE {
+
+    INT_SHAKE_XP    = 0x0001,
+    INT_SHAKE_XM    = 0x0002,
+    INT_SHAKE_YP    = 0x0004,
+    INT_SHAKE_YM    = 0x0008,
+    INT_CH_ORIENT_XY= 0x0040,
+    INT_CH_ORIENT_Z = 0x0080,
+    INT_TILT        = 0x8000,
+    INT_ORIENT_Z    = 0x4000,
+    INT_ORIENT_XY1  = 0x2000,
+    INT_ORIENT_XY0  = 0x1000,
+    INT_DATA_READY  = 0x0100
+
+} MXC400xIntSource;
+
+typedef enum MXC400XORIENTCHANGE {
+
+    ORIENT_CHANGE_FAST      = 0x00,
+    ORIENT_CHANGE_MEDIUM    = 0x01,
+    ORIENT_CHANGE_SLOW      = 0x02,
+    ORIENT_CHANGE_SLOWEST   = 0x03
+
+} MXC400xOrientChange;
+
+typedef enum MXC400XSHAKESPEED {
+
+    SHAKE_FAST      = 0x00,
+    SHAKE_MEDIUM    = 0x01,
+    SHAKE_SLOW      = 0x02,
+    SHAKE_SLOWEST   = 0x03
+
+} MXC400xShakeSpeed;
+
+typedef enum MXC400XSHAKETHRESH {
+
+    SHAKE_THRESH_G25    = 0x00,
+    SHAKE_THRESH_G50    = 0x01,
+    SHAKE_THRESH_1G     = 0x02,
+    SHAKE_THRESH_1G25   = 0x03,
+    SHAKE_THRESH_1G50   = 0x04,
+    SHAKE_THRESH_1G75   = 0x05,
+    SHAKE_THRESH_2G     = 0x06,
+    SHAKE_THRESH_2G25   = 0x07
+
+} MXC400xShakeThresh;
+
+typedef enum MXC400XSHAKEMODE {
+
+    SHAKE_MODE_NOTHRESH = 0x00,
+    SHAK_MODE_THRESH    = 0x01
+
+} MXC400xShakeMode;
+
+#pragma pack(push, 1)
 typedef struct MXC400XRAWDATA {
 
-    uint16_t x_accel;
-    uint16_t y_accel;
-    uint16_t z_accel;
-    uint8_t temperature;
+    int16_t x_accel;
+    int16_t y_accel;
+    int16_t z_accel;
+    int8_t temperature;
 
 } MXC400xRawData;
 
+#pragma pack(pop)
 
 typedef struct MXC400XREALDATA {
 
@@ -110,10 +165,51 @@ uint8_t MXC400xRead(const MXC400x* const dev, const MXC400xReg reg);
  * @brief 
  * 
  * @param dev 
+ * @return uint16_t 
+ */
+uint16_t MXC400xReadInt(const MXC400x* const dev);
+
+/**
+ * @brief 
+ * 
+ * @param dev 
+ * @param int_mask 
+ * @return uint16_t 
+ */
+uint16_t MXC400xEnableInt(const MXC400x* const dev, const uint16_t int_mask);
+
+/**
+ * @brief 
+ * 
+ * @param dev 
+ * @param int_mask 
+ * @return uint16_t 
+ */
+uint16_t MXC400xDisableInt(const MXC400x* const dev, const uint16_t int_mask);
+
+/**
+ * @brief 
+ * 
+ * @param dev 
+ */
+void MXC400xClearInt(const MXC400x* const dev);
+
+/**
+ * @brief 
+ * 
+ * @param dev 
  * @param regsiter 
  * @param value 
  */
 uint8_t MXC400xWrite(const MXC400x* const dev, const MXC400xReg reg, const uint8_t value);
+
+/**
+ * @brief 
+ * 
+ * @param dev 
+ * @return uint8_t 
+ */
+uint8_t MXC400xReset(const MXC400x* const dev);
 
 /**
  * @brief 
@@ -161,7 +257,7 @@ int16_t MXC400xReadZRaw(const MXC400x* const dev);
  * @param dev 
  * @return int8_t 
  */
-int8_t MXC400xReadTRaw(const MXC400x* const dev);
+int8_t MXC400xReadTempRaw(const MXC400x* const dev);
 
 /**
  * @brief 
@@ -169,7 +265,7 @@ int8_t MXC400xReadTRaw(const MXC400x* const dev);
  * @param dev 
  * @return float 
  */
-float MXC400xReadT(const MXC400x* const dev);
+float MXC400xReadTemp(const MXC400x* const dev);
 
 /**
  * @brief 
@@ -187,4 +283,11 @@ uint8_t MXC400xReadRawData(const MXC400x* const dev, MXC400xRawData* const data)
  */
 uint8_t MXC400xReadRealData(const MXC400x* const dev, MXC400xRealData* const data);
 
+/**
+ * @brief 
+ * 
+ * @param dev 
+ * @return uint8_t 
+ */
+uint8_t MXC400xReadID(const MXC400x* const dev) { return MXC400xRead(dev, ID);}
 
