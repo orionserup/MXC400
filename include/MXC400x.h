@@ -165,6 +165,15 @@ uint8_t MXC400xRead(const MXC400x* const dev, const MXC400xReg reg);
  * @brief 
  * 
  * @param dev 
+ * @param regsiter 
+ * @param value 
+ */
+uint8_t MXC400xWrite(const MXC400x* const dev, const MXC400xReg reg, const uint8_t value);
+
+/**
+ * @brief 
+ * 
+ * @param dev 
  * @return uint16_t 
  */
 uint16_t MXC400xReadInt(const MXC400x* const dev);
@@ -205,15 +214,6 @@ void MXC400xClearInt(const MXC400x* const dev);
  * @return uint8_t 
  */
 uint8_t MXC400xSetDetection(const MXC400x* const dev, const MXC400xShakeMode mode, const MXC400xShakeSpeed speed, const MXC400xShakeThresh thresh, const MXC400xOrientChange chor);
-
-/**
- * @brief 
- * 
- * @param dev 
- * @param regsiter 
- * @param value 
- */
-uint8_t MXC400xWrite(const MXC400x* const dev, const MXC400xReg reg, const uint8_t value);
 
 /**
  * @brief 
