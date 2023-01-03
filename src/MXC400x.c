@@ -1,7 +1,7 @@
 /**
  * @file MXC400x.c
- * @author your name (you@domain.com)
- * @brief 
+ * @author Orion Serup (oserup@proton.me)
+ * @brief Contains the functionality implementation for the MXC400
  * @version 0.1
  * @date 2022-12-02
  * 
@@ -14,8 +14,10 @@
 
 static int16_t MXC400xReadData(const MXC400x* const dev, const MXC400xReg address) {
 
+    #ifdef DEBUG
     if(dev == NULL)
         return 0;
+    #endif
 
     uint8_t buffer[2];
     dev->hal.i2c_reg_read(MXC400xADDRESS, address, buffer, 2);
@@ -27,15 +29,17 @@ static int16_t MXC400xReadData(const MXC400x* const dev, const MXC400xReg addres
 
 static float MXC400xScaleData(const MXC400x* const dev, const uint16_t input) {
 
+    #ifdef DEBUG
     if(dev == NULL)
         return 0.0f;
+    #endif
 
     int32_t output = input; // input is a left justified signed 12 bit value
-    output  /=  dev->range == RANGE_PM_2G? 8:
+    output  /=  dev->range == RANGE_PM_2G? 8: // scale it so it matches up with the range
                 dev->range == RANGE_PM_4G? 4:
                 dev->range == RANGE_PM_8G? 2: 1;
 
-    return output / 2048.0f; 
+    return output / 2048.0f; // normalize the value to be a float
 
 }
 
@@ -57,6 +61,11 @@ MXC400x* MXC400xInit(MXC400x* const dev, const MXC400xHAL* const hal, const MXC4
 
 void MXC400xDeinit(MXC400x* const dev) {
 
+    #ifdef DEBUG
+    if(dev == NULL)
+        return;
+    #endif
+
     MXC400xWrite(dev, CONTROL, 0x61); // put the device to sleep and clear any config, replace with undefined values
     memset(&dev->hal, 0, sizeof(MXC400xHAL));
     dev->range = RANGE_UNDEFINED;
@@ -65,8 +74,10 @@ void MXC400xDeinit(MXC400x* const dev) {
 
 uint8_t MXC400xRead(const MXC400x* const dev, const MXC400xReg reg) {
 
+    #ifdef DEBUG
     if(dev == NULL)
         return 0;
+    #endif
 
     uint8_t data = 0;
     dev->hal.i2c_reg_read(MXC400xADDRESS, reg, &data, 1);
@@ -76,8 +87,10 @@ uint8_t MXC400xRead(const MXC400x* const dev, const MXC400xReg reg) {
 
 uint8_t MXC400xWrite(const MXC400x* const dev, const MXC400xReg reg, const uint8_t value)  { 
 
+    #ifdef DEBUG
     if(dev == NULL)
         return 0;
+    #endif
 
     return dev->hal.i2c_reg_write(MXC400xADDRESS, reg, &value, 1); 
     
@@ -85,8 +98,10 @@ uint8_t MXC400xWrite(const MXC400x* const dev, const MXC400xReg reg, const uint8
 
 uint16_t MXC400xReadInt(const MXC400x* const dev) {
 
+    #ifdef DEBUG
     if(dev == NULL)
         return 0;
+    #endif
 
     uint8_t buffer[2] = {0};
     dev->hal.i2c_reg_read(MXC400xADDRESS, INT_SRC0, buffer, 2);
@@ -94,11 +109,59 @@ uint16_t MXC400xReadInt(const MXC400x* const dev) {
     return buffer[0] + (buffer[1] << 8);
 }
 
-void MXC400xClearInt(const MXC400x* const dev)  {
+uint8_t MXC400xClearInt(const MXC400x* const dev)  {
+
+    #ifdef DEBUG
+    if(dev == NULL)
+        return;
+    #endif
 
     uint8_t buffer[] = {0xff, 0x1};
-    dev->hal.i2c_reg_write(MXC400xADDRESS, INT_SRC0, buffer, 2);
+    return (uint8_t)dev->hal.i2c_reg_write(MXC400xADDRESS, INT_SRC0, buffer, 2);
     
+}
+
+uint8_t MXC400xEnableInt(const MXC400x* const dev, const uint16_t int_mask) {
+
+    #ifdef DEBUG
+    if(dev == NULL)
+        return 0;
+    #endif
+
+    uint8_t buffer[2];
+    if(dev->hal.i2c_reg_read(dev, INT_MASK0, buffer, 2) == 0)
+        return 0;
+
+    buffer[0] |= (int_mask & 0xff);
+    buffer[1] |= (int_mask >> 8);
+
+    return dev->hal.i2c_reg_write(dev, INT_MASK0, buffer, 2);
+    
+}
+
+uint8_t MXC400xDisableInt(const MXC400x* const dev, const uint16_t int_mask) {
+
+    #ifdef DEBUG
+    if(dev == NULL)
+        return 0;
+    #endif
+
+    uint8_t buffer[2];
+    if(dev->hal.i2c_reg_read(dev, INT_MASK0, buffer, 2) == 0)
+        return 0;
+
+    buffer[0] &= ~(int_mask & 0xff);
+    buffer[1] &= ~(int_mask >> 8);
+
+    return dev->hal.i2c_reg_write(dev, INT_MASK0, buffer, 2);
+
+}
+
+uint8_t MXC400xSetDetection(const MXC400x* const dev, const MXC400xShakeMode mode, const MXC400xShakeSpeed speed, const MXC400xShakeThresh thresh, const MXC400xOrientChange chor) {
+
+    uint8_t value = ((mode & 1) << 7) | ((thresh & 0x7) << 4) | ((speed & 0x3) << 2) | (chor & 0x3);
+    MXC400xWrite(dev, DETECTION, value);
+
 }
 
 int16_t MXC400xReadXRaw(const MXC400x* const dev) { return MXC400xReadData(dev, XOUT_H); }
@@ -109,8 +172,10 @@ int16_t MXC400xReadZRaw(const MXC400x* const dev) { return MXC400xReadData(dev, 
 
 int8_t MXC400xReadTempRaw(const MXC400x* const dev) { 
 
+    #ifdef DEBUG
     if(dev == NULL)
         return INT8_MIN;
+    #endif
 
     int8_t temp = 0;
     dev->hal.i2c_reg_read(MXC400xADDRESS, TOUT, &temp, 1);
@@ -128,8 +193,10 @@ float MXC400xReadTemp(const MXC400x* const dev) { return MXC400xReadTRaw(dev) * 
 
 uint8_t MXC400xReadRawData(const MXC400x* const dev, MXC400xRawData* const data) {
 
+    #ifdef DEBUG
     if(dev == NULL || data == NULL)
         return 0;
+    #endif
 
     return dev->hal.i2c_reg_read(MXC400xADDRESS, XOUT_H, data, sizeof(MXC400xRawData));
 
