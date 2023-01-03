@@ -129,13 +129,13 @@ uint8_t MXC400xEnableInt(const MXC400x* const dev, const uint16_t int_mask) {
     #endif
 
     uint8_t buffer[2];
-    if(dev->hal.i2c_reg_read(dev, INT_MASK0, buffer, 2) == 0)
+    if(dev->hal.i2c_reg_read(MXC400xADDRESS, INT_MASK0, buffer, 2) == 0)
         return 0;
 
     buffer[0] |= (int_mask & 0xff);
     buffer[1] |= (int_mask >> 8);
 
-    return dev->hal.i2c_reg_write(dev, INT_MASK0, buffer, 2);
+    return dev->hal.i2c_reg_write(MXC400xADDRESS, INT_MASK0, buffer, 2);
     
 }
 
@@ -147,13 +147,13 @@ uint8_t MXC400xDisableInt(const MXC400x* const dev, const uint16_t int_mask) {
     #endif
 
     uint8_t buffer[2];
-    if(dev->hal.i2c_reg_read(dev, INT_MASK0, buffer, 2) == 0)
+    if(dev->hal.i2c_reg_read(MXC400xADDRESS, INT_MASK0, buffer, 2) == 0)
         return 0;
 
     buffer[0] &= ~(int_mask & 0xff);
     buffer[1] &= ~(int_mask >> 8);
 
-    return dev->hal.i2c_reg_write(dev, INT_MASK0, buffer, 2);
+    return dev->hal.i2c_reg_write(MXC400xADDRESS, INT_MASK0, buffer, 2);
 
 }
 
@@ -189,7 +189,7 @@ float MXC400xReadY(const MXC400x* const dev) { return MXC400xScaleData(dev, MXC4
 
 float MXC400xReadZ(const MXC400x* const dev) { return MXC400xScaleData(dev, MXC400xReadZRaw(dev)); }
 
-float MXC400xReadTemp(const MXC400x* const dev) { return MXC400xReadTRaw(dev) * .586f; }
+float MXC400xReadTemp(const MXC400x* const dev) { return MXC400xReadTempRaw(dev) * .586f; }
 
 uint8_t MXC400xReadRawData(const MXC400x* const dev, MXC400xRawData* const data) {
 

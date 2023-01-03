@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(NAME MXC400 
+project(MXC400 
         LANGUAGES C 
         DESCRIPTION "A Hardware agnostic library for the MXC400 accelerometer")
 
