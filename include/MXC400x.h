@@ -158,15 +158,15 @@ typedef struct MXC400XREALDATA {
 
 } MXC400xRealData;
 
-// ---------------------------------------- HAL and Device Structuress ------------------------------ //
+// ---------------------------------------- HAL and Device Structures ------------------------------ //
 
 /// @brief All of the functions we need to 
 typedef struct MXC400XHAL {
 
     /// @brief Function to write to an I2C Device from a Master
-    uint32_t (*i2c_reg_write)(const uint8_t address, const uint8_t reg, const void* const data, const uint32_t size);
+    uint8_t (*i2c_reg_write)(const uint8_t address, const uint8_t reg, const void* const data, const uint8_t size);
     /// @brief Function to read from an I2C Device to a Master
-    uint32_t (*i2c_reg_read)(const uint8_t address, const uint8_t reg, void* const data, const uint32_t size);
+    uint8_t (*i2c_reg_read)(const uint8_t address, const uint8_t reg, void* const data, const uint8_t size);
 
 } MXC400xHAL;
 

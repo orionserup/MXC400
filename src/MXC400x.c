@@ -22,12 +22,12 @@ static int16_t MXC400xReadData(const MXC400x* const dev, const MXC400xReg addres
     uint8_t buffer[2];
     dev->hal.i2c_reg_read(MXC400xADDRESS, address, buffer, 2);
     
-    int16_t out = (buffer[0] << 8) + buffer[1];
+    int16_t out = ((buffer[0] << 8) | buffer[1]);
     return out;
 
 }
 
-static float MXC400xScaleData(const MXC400x* const dev, const uint16_t input) {
+static float MXC400xScaleData(const MXC400x* const dev, const int16_t input) {
 
     #ifdef DEBUG
     if(dev == NULL)
