@@ -1,7 +1,7 @@
 /**
  * @file MXC400x.h
  * @author Orion Serup (oserup@proton.me)
- * @brief Containts the definitions and declarations for the MXC400X functionality
+ * @brief Contains the definitions and declarations for the MXC400X functionality
  * @version 0.1
  * @date 2022-12-02
  * 
@@ -29,7 +29,7 @@ typedef enum MXC400XREG {
     INT_CLR0    = 0x00, ///< Writing the Register and it clears the interrupt flags
     INT_SRC1    = 0x01, ///< Reading this Register gets more of the sources of the interrupts
     INT_CLR1    = 0x01, ///< Writing this register clears more of the interrupt flags
-    STATUS      = 0x02, ///< Status regsiter for the device
+    STATUS      = 0x02, ///< Status register for the device
     XOUT_H      = 0x03, ///< The High byte of the X acceleration
     XOUT_L      = 0x04, ///< The Low Byte of the X Acceleration
     YOUT_H      = 0x05, ///< The High Byte of the Y acceleration
@@ -39,8 +39,8 @@ typedef enum MXC400XREG {
     TOUT        = 0x09, ///< The Temperature value
     INT_MASK0   = 0x0A, ///< The First byte of the interrupt mask
     INT_MASK1   = 0x0B, ///< The Second Byte of the interrupt mask
-    DETECTION   = 0x0C, ///< The detection parameter regsiter
-    CONTROL     = 0x0D, ///< The Control and config register
+    DETECTION   = 0x0C, ///< The detection parameter register
+    CONTROL     = 0x0D, ///< The Control and configuration register
     ID          = 0x0F  ///< The Identification register
 
 } MXC400xReg;
@@ -62,7 +62,7 @@ typedef enum MXC400XRANGE {
 /// @brief The Interrupt sources for the device
 typedef enum MXC400XINTSOURCE {
 
-    // All of the Settable register bits enablable interrupts
+    // All of the interrupts that can be enabled
 
     INT_SHAKE_XP    = 0x0001,   ///< Interrupt on a shake in the Positive X Direction
     INT_SHAKE_XM    = 0x0002,   ///< Interrupt on a shake in the Negative X direction
@@ -86,7 +86,7 @@ typedef enum MXC400XINTSOURCE {
 
 } MXC400xIntSource;
 
-// -------------------------- Orientation Change Detection Config -------------------------------- //
+// -------------------------- Orientation Change Detection Configuration -------------------------------- //
 
 /// @brief How Fast of an orientation change to detect
 typedef enum MXC400XORIENTCHANGE {
@@ -98,7 +98,7 @@ typedef enum MXC400XORIENTCHANGE {
 
 } MXC400xOrientChange;
 
-// ----------------------------- Shake Interrupt Config Types ---------------------------------- //
+// ----------------------------- Shake Interrupt Configuration Types ---------------------------------- //
 
 /// @brief How fast of of a shake
 typedef enum MXC400XSHAKESPEED {
@@ -132,7 +132,7 @@ typedef enum MXC400XSHAKEMODE {
 
 } MXC400xShakeMode;
 
-// ---------------------------------------- Data Structs ---------------------------------------- //
+// ---------------------------------------- Data Structures ---------------------------------------- //
 
 #pragma pack(push, 1)
 
@@ -158,7 +158,7 @@ typedef struct MXC400XREALDATA {
 
 } MXC400xRealData;
 
-// ---------------------------------------- HAL and Device Structs ------------------------------ //
+// ---------------------------------------- HAL and Device Structuress ------------------------------ //
 
 /// @brief All of the functions we need to 
 typedef struct MXC400XHAL {
@@ -178,7 +178,7 @@ typedef struct MXC400X {
 
 } MXC400x;
 
-// ------------------------------------------ Init and Deinit ---------------------------------------------- //
+// ------------------------------------------ Initialization and Deinitialization ---------------------------------------------- //
 
 /**
  * @brief Initializes an accelerometer object

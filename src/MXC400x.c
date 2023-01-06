@@ -160,7 +160,7 @@ uint8_t MXC400xDisableInt(const MXC400x* const dev, const uint16_t int_mask) {
 uint8_t MXC400xSetDetection(const MXC400x* const dev, const MXC400xShakeMode mode, const MXC400xShakeSpeed speed, const MXC400xShakeThresh thresh, const MXC400xOrientChange chor) {
 
     uint8_t value = ((mode & 1) << 7) | ((thresh & 0x7) << 4) | ((speed & 0x3) << 2) | (chor & 0x3);
-    MXC400xWrite(dev, DETECTION, value);
+    return MXC400xWrite(dev, DETECTION, value);
 
 }
 
