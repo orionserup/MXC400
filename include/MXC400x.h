@@ -268,7 +268,7 @@ uint8_t MXC400xReset(const MXC400x* const dev);
  * @param[in] dev: Device to read the ID from 
  * @return uint8_t: The ID, 0 if there was an error
  */
-uint8_t MXC400xReadID(const MXC400x* const dev) { return MXC400xRead(dev, ID);}
+inline uint8_t MXC400xReadID(const MXC400x* const dev) { return MXC400xRead(dev, ID);}
 
 // ---------------------------------------------- Detection Setting -------------------------------------- //
 
