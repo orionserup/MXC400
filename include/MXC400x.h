@@ -18,30 +18,30 @@
 
 // ---------------------------------- Global Defines ---------------------------------- //
 
-#define MXC400xADDRESS 0x15 /// The I2C Address for the device
+#define MXC400X_ADDRESS 0x15 /// The I2C Address for the device
 
 // ---------------------------------- Register Definitions --------------------------- //
 
 /// @brief All of the register addresses in the device
 typedef enum MXC400XREG {
 
-    INT_SRC0    = 0x00, ///< Read Register and it gives you some of the interrupt sources
-    INT_CLR0    = 0x00, ///< Writing the Register and it clears the interrupt flags
-    INT_SRC1    = 0x01, ///< Reading this Register gets more of the sources of the interrupts
-    INT_CLR1    = 0x01, ///< Writing this register clears more of the interrupt flags
-    STATUS      = 0x02, ///< Status register for the device
-    XOUT_H      = 0x03, ///< The High byte of the X acceleration
-    XOUT_L      = 0x04, ///< The Low Byte of the X Acceleration
-    YOUT_H      = 0x05, ///< The High Byte of the Y acceleration
-    YOUT_L      = 0x06, ///< The Low Byte of the Y acceleration
-    ZOUT_H      = 0x07, ///< The High Byte of the Z Acceleration    
-    ZOUT_L      = 0x08, ///< The Low Byte of the Z acceleration
-    TOUT        = 0x09, ///< The Temperature value
-    INT_MASK0   = 0x0A, ///< The First byte of the interrupt mask
-    INT_MASK1   = 0x0B, ///< The Second Byte of the interrupt mask
-    DETECTION   = 0x0C, ///< The detection parameter register
-    CONTROL     = 0x0D, ///< The Control and configuration register
-    ID          = 0x0F  ///< The Identification register
+  MXC400X_REG_INT_SRC0    = 0x00, ///< Read Register and it gives you some of the interrupt sources
+  MXC400X_REG_INT_CLR0    = 0x00, ///< Writing the Register and it clears the interrupt flags
+  MXC400X_REG_INT_SRC1    = 0x01, ///< Reading this Register gets more of the sources of the interrupts
+  MXC400X_REG_INT_CLR1    = 0x01, ///< Writing this register clears more of the interrupt flags
+  MXC400X_REG_STATUS      = 0x02, ///< Status register for the device
+  MXC400X_REG_XOUT_H      = 0x03, ///< The High byte of the X acceleration
+  MXC400X_REG_XOUT_L      = 0x04, ///< The Low Byte of the X Acceleration
+  MXC400X_REG_YOUT_H      = 0x05, ///< The High Byte of the Y acceleration
+  MXC400X_REG_YOUT_L      = 0x06, ///< The Low Byte of the Y acceleration
+  MXC400X_REG_ZOUT_H      = 0x07, ///< The High Byte of the Z Acceleration
+  MXC400X_REG_ZOUT_L      = 0x08, ///< The Low Byte of the Z acceleration
+  MXC400X_REG_TOUT        = 0x09, ///< The Temperature value
+  MXC400X_REG_INT_MASK0   = 0x0A, ///< The First byte of the interrupt mask
+  MXC400X_REG_INT_MASK1   = 0x0B, ///< The Second Byte of the interrupt mask
+  MXC400X_REG_DETECTION   = 0x0C, ///< The detection parameter register
+  MXC400X_REG_CONTROL     = 0x0D, ///< The Control and configuration register
+  MXC400X_REG_ID          = 0x0F  ///< The Identification register
 
 } MXC400xReg;
 
@@ -50,10 +50,10 @@ typedef enum MXC400XREG {
 /// @brief The Range of values that can be read, determines resolution
 typedef enum MXC400XRANGE {
 
-    RANGE_PM_2G     = 0x0,  ///< The range is from -2G to 2G
-    RANGE_PM_4G     = 0x1,  ///< The range is from -4G to 4G
-    RANGE_PM_8G     = 0x2,  ///< The range is from -8G to 8G
-    RANGE_UNDEFINED = 0x3   ///< Undefined range, wont work
+    MXC400X_RANGE_PM_2G     = 0x0,  ///< The range is from -2G to 2G
+    MXC400X_RANGE_PM_4G     = 0x1,  ///< The range is from -4G to 4G
+    MXC400X_RANGE_PM_8G     = 0x2,  ///< The range is from -8G to 8G
+    MXC400X_RANGE_UNDEFINED = 0x3   ///< Undefined range, wont work
 
 } MXC400xRange;
 
@@ -64,25 +64,25 @@ typedef enum MXC400XINTSOURCE {
 
     // All of the interrupts that can be enabled
 
-    INT_SHAKE_XP    = 0x0001,   ///< Interrupt on a shake in the Positive X Direction
-    INT_SHAKE_XM    = 0x0002,   ///< Interrupt on a shake in the Negative X direction
-    INT_SHAKE_YP    = 0x0004,   ///< Interrupt on a shake in the Positive Y direction
-    INT_SHAKE_YM    = 0x0008,   ///< Interrupt on a shake in the Negative Y direction
-    INT_CH_ORIENT_XY= 0x0040,   ///< Interrupt on a change in orientation in the X/Y Direction
-    INT_CH_ORIENT_Z = 0x0080,   ///< Interrupt on a change in orientation in the Z Direction
-    INT_DATA_READY  = 0x0100,   ///< Interrupt when the Data is ready to read
+    MXC400X_INT_SHAKE_XP    = 0x0001,   ///< Interrupt on a shake in the Positive X Direction
+    MXC400X_INT_SHAKE_XM    = 0x0002,   ///< Interrupt on a shake in the Negative X direction
+    MXC400X_INT_SHAKE_YP    = 0x0004,   ///< Interrupt on a shake in the Positive Y direction
+    MXC400X_INT_SHAKE_YM    = 0x0008,   ///< Interrupt on a shake in the Negative Y direction
+    MXC400X_INT_CH_ORIENT_XY= 0x0040,   ///< Interrupt on a change in orientation in the X/Y Direction
+    MXC400X_INT_CH_ORIENT_Z = 0x0080,   ///< Interrupt on a change in orientation in the Z Direction
+    MXC400X_INT_DATA_READY  = 0x0100,   ///< Interrupt when the Data is ready to read
     
     // Readable interrupt flags only
 
-    INT_TILT        = 0x8000,   ///< Interrupt on a tilt in Z
-    INT_ORIENT_Z    = 0x4000,   ///< Interrupt on orientaion in the Z direction
+    MXC400X_INT_TILT        = 0x8000,   ///< Interrupt on a tilt in Z
+    MXC400X_INT_ORIENT_Z    = 0x4000,   ///< Interrupt on orientaion in the Z direction
 
     // Mutually Exclusive, can only pick one
 
-    INT_ORIENT_XP   = 0x0000,   ///< Interrupt on orientation in Positive X direction (+1G)
-    INT_ORIENT_YP   = 0x1000,   ///< Interrupt on orientation in Positive Y Direction (+1G)
-    INT_ORIENT_XM   = 0x2000,   ///< Interrupt on orientation in Negative X Direction (-1G)
-    INT_ORIENT_YM   = 0x3000,   ///< Interrupt on orientation in Negative X Direction (-1G)
+    MXC400X_INT_ORIENT_XP   = 0x0000,   ///< Interrupt on orientation in Positive X direction (+1G)
+    MXC400X_INT_ORIENT_YP   = 0x1000,   ///< Interrupt on orientation in Positive Y Direction (+1G)
+    MXC400X_INT_ORIENT_XM   = 0x2000,   ///< Interrupt on orientation in Negative X Direction (-1G)
+    MXC400X_INT_ORIENT_YM   = 0x3000,   ///< Interrupt on orientation in Negative X Direction (-1G)
 
 } MXC400xIntSource;
 
@@ -91,10 +91,10 @@ typedef enum MXC400XINTSOURCE {
 /// @brief How Fast of an orientation change to detect
 typedef enum MXC400XORIENTCHANGE {
 
-    ORIENT_CHANGE_FAST      = 0x00, ///< A Fast Change will be detected
-    ORIENT_CHANGE_MEDIUM    = 0x01, ///< A Medium speed change will be detected
-    ORIENT_CHANGE_SLOW      = 0x02, ///< A Slow speed change will be detected
-    ORIENT_CHANGE_SLOWEST   = 0x03  ///< A super slow change will be detected
+    MXC400X_ORIENT_CHANGE_FAST      = 0x00, ///< A Fast Change will be detected
+    MXC400X_ORIENT_CHANGE_MEDIUM    = 0x01, ///< A Medium speed change will be detected
+    MXC400X_ORIENT_CHANGE_SLOW      = 0x02, ///< A Slow speed change will be detected
+    MXC400X_ORIENT_CHANGE_SLOWEST   = 0x03  ///< A super slow change will be detected
 
 } MXC400xOrientChange;
 
@@ -103,32 +103,32 @@ typedef enum MXC400XORIENTCHANGE {
 /// @brief How fast of of a shake
 typedef enum MXC400XSHAKESPEED {
 
-    SHAKE_FAST      = 0x00, ///< Fast shakes will be detected
-    SHAKE_MEDIUM    = 0x01, ///< Medium fast shakes will be detected
-    SHAKE_SLOW      = 0x02, ///< Slow Shakes will be detected
-    SHAKE_SLOWEST   = 0x03  ///< The slowest shakes will be detected
+    MXC400X_SHAKE_FAST      = 0x00, ///< Fast shakes will be detected
+    MXC400X_SHAKE_MEDIUM    = 0x01, ///< Medium fast shakes will be detected
+    MXC400X_SHAKE_SLOW      = 0x02, ///< Slow Shakes will be detected
+    MXC400X_SHAKE_SLOWEST   = 0x03  ///< The slowest shakes will be detected
 
 } MXC400xShakeSpeed;
 
 /// @brief What threshold of force in the shake to detect
 typedef enum MXC400XSHAKETHRESH {
 
-    SHAKE_THRESH_G25    = 0x00, ///< Shake threshold is .25G
-    SHAKE_THRESH_G50    = 0x01, ///< Shake threshold is .5G
-    SHAKE_THRESH_1G     = 0x02, ///< Shake threshold is 1G
-    SHAKE_THRESH_1G25   = 0x03, ///< Shake threshold is 1.25G
-    SHAKE_THRESH_1G50   = 0x04, ///< Shake threshold is 1.5G
-    SHAKE_THRESH_1G75   = 0x05, ///< Shake threshold is 1.75G
-    SHAKE_THRESH_2G     = 0x06, ///< Shake threshold is 2G
-    SHAKE_THRESH_2G25   = 0x07  ///< Shake threshold is 2.25G
+    MXC400X_SHAKE_THRESH_G25    = 0x00, ///< Shake threshold is .25G
+    MXC400X_SHAKE_THRESH_G50    = 0x01, ///< Shake threshold is .5G
+    MXC400X_SHAKE_THRESH_1G     = 0x02, ///< Shake threshold is 1G
+    MXC400X_SHAKE_THRESH_1G25   = 0x03, ///< Shake threshold is 1.25G
+    MXC400X_SHAKE_THRESH_1G50   = 0x04, ///< Shake threshold is 1.5G
+    MXC400X_SHAKE_THRESH_1G75   = 0x05, ///< Shake threshold is 1.75G
+    MXC400X_SHAKE_THRESH_2G     = 0x06, ///< Shake threshold is 2G
+    MXC400X_SHAKE_THRESH_2G25   = 0x07  ///< Shake threshold is 2.25G
 
 } MXC400xShakeThresh;
 
 /// @brief How to detect shakes and throw interrupts
 typedef enum MXC400XSHAKEMODE {
 
-    SHAKE_MODE_NOTHRESH = 0x00, ///< Shake will be detected with speed
-    SHAK_MODE_THRESH    = 0x01  ///< Shake will be detected with speed and force
+    MXC400X_SHAKE_MODE_NOTHRESH = 0x00, ///< Shake will be detected with speed
+    MXC400X_SHAK_MODE_THRESH    = 0x01  ///< Shake will be detected with speed and force
 
 } MXC400xShakeMode;
 
@@ -268,7 +268,7 @@ uint8_t MXC400xReset(const MXC400x* const dev);
  * @param[in] dev: Device to read the ID from 
  * @return uint8_t: The ID, 0 if there was an error
  */
-inline uint8_t MXC400xReadID(const MXC400x* const dev) { return MXC400xRead(dev, ID);}
+inline uint8_t MXC400xReadID(const MXC400x* const dev) { return MXC400xRead(dev, MXC400X_REG_ID);}
 
 // ---------------------------------------------- Detection Setting -------------------------------------- //
 
